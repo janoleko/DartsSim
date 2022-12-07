@@ -4,5 +4,5 @@ Me and my Uni-friends recently started playing darts. As we are quite bad (i.e. 
 
 The code provided here can be used to answer this question. It enables the user to efficiently simulate a large number of throws with a given target and standard deviation.
 
-To see this in action with a GUI please visit
+To see this in action with a GUI please click [here](https://janoleko.shinyapps.io/Darts/)
 
