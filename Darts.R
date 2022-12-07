@@ -9,13 +9,12 @@ darts_score = function(x,y){
   if(x == 0 & y < 0){a = 3/2*pi}
   a = a*180/pi
 
-
   # actually getting the score:
 
   if(r < 0.635){return = 50} # bullseye inner
   if(r >= 0.635 & r < 1.59){return = 25} # bullseye outer
 
-  else{ # rest
+  if(r >= 1.59){ # rest
     # getting the slice
     if(a >= 9 & a < 27){value = 13}
     if(a >= 27 & a < 45){value = 4}
@@ -36,7 +35,7 @@ darts_score = function(x,y){
     if(a >= 297 & a < 315){value = 2}
     if(a >= 315 & a < 333){value = 15}
     if(a >= 333 & a < 351){value = 10}
-    if(a >= 151 | a < 9){value = 6}
+    if(a >= 351 | a < 9){value = 6}
 
     # checking whether multiplication is needed (or outside)
     if(r < 9.9){return = value}
@@ -58,17 +57,25 @@ darts_sim_norm = function(mean = c(0,0), sd = c(10,10), runs = 100){
   return(sum(points)/runs)
 }
 
-darts_sim_unif = function(runs = 100){
-  points = numeric(3*runs)
-  for (i in 1:(3*runs)){
-    r = runif(1, 0, 17)
-    a = runif(1, 0, 360)
-    points[i] = darts_score(x,y)
-  }
-  return(sum(points)/runs)
-}
+# aiming at center
+darts_sim_norm(sd = c(2,2), runs = 10000)
+# aiming at triple 20
+darts_sim_norm(mean = c(0, 10.3), sd = c(2,2), runs = 10000)
+# aiming at triple 7
+darts_sim_norm(mean = c(-5.3, -8.6), sd = c(2,2), runs = 10000)
 
-darts_sim_norm(runs = 1000)
-darts_sim_norm(mean = c(0, 10.3), sd = c(1,1), runs = 1000)
+
+
+
+x = seq(-17,17, length.out = 100)
+y = seq(-17,17, length.out = 100)
+z = t(outer(x, y, function(x,y) dnorm(y, 0, 2)*dnorm(x, 0, 2)))
+
+
+require('jpeg')
+jpg = readJPEG('darts.jpg', native=T) # read the file
+plot(1,1,xlim=c(-22.55,22.55),ylim=c(-22.55,22.55),asp=1,type='n',xaxs='i',yaxs='i',xaxt='n',yaxt='n',xlab='',ylab='',bty='n')
+rasterImage(jpg,1,1,xleft = -22.05, xright = 22.95, ybottom = -22.95, ytop = 22.05)
+contour(x,y,z, xlim = c(-17,17), ylim = c(-17,17), nlevels = 3, drawlabels = F, col = "gray62", lwd = 2, add = T)
 
 
